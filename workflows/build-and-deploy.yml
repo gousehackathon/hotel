@@ -3,40 +3,29 @@ name: Build and Deploy Frontend
 
 on:
   push:
-    branches:
-      - master
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
+  # build job
   build:
+    name: Build
+    # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Checkout code
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout Repo
         uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - name: Setup node
+        uses: actions/setup-node@master
         with:
-          node-version: 18
-
-      - name: Install dependencies
+          node-version: '18'
+      # Install the dependencies need to build the app
+      - name: Install Dependencies
         run: npm install
-
-      - name: Build the frontend
-        run: npm run build
-
-      - name: Deploy to Backend Repo
-        run: |
-          git clone https://github.com/gousehackathon/node-backend.git
-          rm -rf Node-backend/browser # Adjust as needed
-          cp -R browser Node-backend/browser # Adjust as needed
-          cd Node-backend
-          git config user.name 'Gouse0573'
-          git config user.email 'gouse.0573@gmail.com'
-          git add .
-          git commit -m 'Deploy frontend build'
-          git push origin master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPO_URL: https://github.com/gousehackathon/node-backend.git
-          BUILD_DIR: build
+      # Runs a set of commands to build
+      - name: Build
+        run: npm run build --prod
+      # sotre the artifact
