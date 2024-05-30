@@ -37,6 +37,7 @@ jobs:
       - name: Checkout Backend Repo
         uses: actions/checkout@v2
         with:
-          repository: https://github.com/gousehackathon/node-backend.git
+          repository: gousehackathon/node-backend
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          ref: master
           path: backend-repo
