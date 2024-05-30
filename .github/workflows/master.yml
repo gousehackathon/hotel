@@ -49,7 +49,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: build
-          path: ./build
+          path: ./public
 
       - name: Remove Old Build Files
         run: rm -rf backend-repo/path/to/build/*
