@@ -62,7 +62,7 @@ jobs:
         run: rm -rf backend-repo/browser/*
 
       - name: Copy New Build Files
-        run: cp -R ./build/* backend-repo/browser/
+        run: cp -R ./build/* backend-repo/
 
       - name: List backend Directory
         run: ls -la backend-repo/browser
