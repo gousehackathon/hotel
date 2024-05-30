@@ -59,10 +59,13 @@ jobs:
         run: ls -la backend-repo
 
       - name: Remove Old Build Files
-        run: rm -rf backend-repo/path/to/build/*
+        run: rm -rf backend-repo/browser/*
 
       - name: Copy New Build Files
-        run: cp -R ./build/* backend-repo/path/to/build/
+        run: cp -R ./build/* backend-repo/browser/
+
+      - name: List backend Directory
+        run: ls -la backend-repo/browser
 
       - name: Commit and Push Changes
         run: |
