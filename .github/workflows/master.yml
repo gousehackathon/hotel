@@ -55,6 +55,9 @@ jobs:
           name: build
           path: ./build
 
+      - name: List backend Directory
+        run: ls -la backend-repo
+
       - name: Remove Old Build Files
         run: rm -rf backend-repo/path/to/build/*
 
