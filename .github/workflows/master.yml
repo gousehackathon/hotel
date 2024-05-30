@@ -1,4 +1,3 @@
-# .github/workflows/build-and-deploy.yml
 name: Build and Deploy Frontend
 
 on:
@@ -8,36 +7,63 @@ on:
     branches: [ master ]
 
 jobs:
-  # build job
   build:
-    name: Build
-    # The type of runner that the job will run on
+    name: Build Frontend
     runs-on: ubuntu-latest
-    # Steps represent a sequence of tasks that will be executed as part of the job
+
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: Checkout Repo
+      - name: Checkout Frontend Repo
         uses: actions/checkout@v2
-      - name: Setup node
-        uses: actions/setup-node@master
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
         with:
           node-version: '18'
-      # Install the dependencies need to build the app
+
       - name: Install Dependencies
         run: npm install
-      # Runs a set of commands to build
-      - name: Build
+
+      - name: Build Frontend
         run: npm run build --prod
-      # sotre the artifact
-      - name: Archive Production Artifact
+
+      - name: Upload Build Artifact
         uses: actions/upload-artifact@v2
         with:
           name: build
           path: ./public
+
+  deploy:
+    name: Deploy to Backend
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
       - name: Checkout Backend Repo
         uses: actions/checkout@v2
         with:
           repository: gousehackathon/node-backend
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          ref: master
           path: backend-repo
+
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build
+          path: ./build
+
+      - name: Remove Old Build Files
+        run: rm -rf backend-repo/path/to/build/*
+
+      - name: Copy New Build Files
+        run: cp -R ./build/* backend-repo/path/to/build/
+
+      - name: Commit and Push Changes
+        run: |
+          cd backend-repo
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add .
+          git commit -m 'Deploy frontend build'
+          git push origin master
+        env:
+          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
