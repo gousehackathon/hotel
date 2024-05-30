@@ -27,7 +27,7 @@ jobs:
         run: npm run build --prod
 
       - name: List Build Directory
-        run: ls -la ./public
+        run: ls -la /home/runner/work/hotel/hotel/dist/hotel
 
       # sotre the artifact
       - name: Archive Production Artifact
