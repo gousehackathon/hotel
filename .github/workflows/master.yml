@@ -34,7 +34,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: build
-          path: ./public
+          path: /home/runner/work/hotel/hotel/dist/hotel
 
   deploy:
     name: Deploy to Backend
