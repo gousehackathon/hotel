@@ -29,3 +29,14 @@ jobs:
       - name: Build
         run: npm run build --prod
       # sotre the artifact
+      - name: Archive Production Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: ./public
+      - name: Checkout Backend Repo
+        uses: actions/checkout@v2
+        with:
+          repository: gousehackathon/node-backend
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          path: backend-repo
