@@ -26,12 +26,12 @@ jobs:
       - name: Build Frontend
         run: npm run build --prod
 
-      - name: Upload Build Artifact
+      # sotre the artifact
+      - name: Archive Production Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: page
-          path: build
-          if-no-files-found: error
+          name: build
+          path: ./public
 
   deploy:
     name: Deploy to Backend
