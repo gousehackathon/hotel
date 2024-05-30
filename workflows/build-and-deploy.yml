@@ -1,0 +1,42 @@
+# .github/workflows/build-and-deploy.yml
+name: Build and Deploy Frontend
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build the frontend
+        run: npm run build
+
+      - name: Deploy to Backend Repo
+        run: |
+          git clone https://github.com/gousehackathon/node-backend.git
+          rm -rf Node-backend/browser # Adjust as needed
+          cp -R browser Node-backend/browser # Adjust as needed
+          cd Node-backend
+          git config user.name 'Gouse0573'
+          git config user.email 'gouse.0573@gmail.com'
+          git add .
+          git commit -m 'Deploy frontend build'
+          git push origin master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_URL: https://github.com/gousehackathon/node-backend.git
+          BUILD_DIR: build
